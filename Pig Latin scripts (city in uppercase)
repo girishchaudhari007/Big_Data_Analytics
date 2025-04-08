@@ -1,0 +1,46 @@
+//Assignment No. 7
+//Create and use UDFs in Pig Latin scripts (Write hadoop code to convert username in uppercase) 
+//Step 1: Open Java Eclipse -> Make New Project->(PigAss7) Add External Libarary->pig , hadoop ,hadoop 0.20_map_reduce->finish
+//Step 2: Add class in project -> PigUDF -> Write below code (Create the UDF)
+
+
+
+import org.apache.pig.EvalFunc;
+import org.apache.pig.data.Tuple;
+public class PigUDF extends EvalFunc<String> {
+public String exec(Tuple tuple)throws IOException {
+ if(tuple ==null) {
+ return null;
+ }
+ String user=(String)tuple.get(0);
+ String city=(String)tuple.get(1);
+ int score=(Integer)tuple.get(2);
+ return user+”,”+city.toUpperCase()+”,”+score;
+}
+}
+
+//Step 3: Export java project in to jar file ->PigAss7.jar
+//Step 4: Open terminal create cust_us.txt file using following command 
+// vi cust_us 
+
+us_user1,delhi,9
+us_user2,mumbai,4
+us_user3,pune,6
+us_user4,bangolre,7
+us_user5,indore,3
+
+//Step 5: Open terminal to create pig file using following command. 
+//vi toupper.pig
+//Write following code in file 
+
+REGISTER /home/cloudera/PigAss7.jar
+DEFINE toupper PigUDF();
+usa = LOAD ‘/home/cloudera/cust_us.txt’ Using PigStorage(‘,’) 
+AS (user:chararray,city:chararray,score:int);
+usa_upper = FOREACH usa GENERATE toupper(user,city,score);
+DUMP usa_upper;
+
+
+//Step 6: Run Pig script
+pig –x local toupper.pig
+
