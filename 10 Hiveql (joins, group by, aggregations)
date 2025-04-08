@@ -1,0 +1,45 @@
+//Assignment No 10
+//Perform operations like joins, group by, and aggregations in Hive.
+
+1. Creating a Hive Table
+
+CREATE TABLE employees (
+ emp_id INT,
+ emp_name STRING,
+ emp_salary DOUBLE,
+ emp_department STRING
+) ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
+
+CREATE TABLE departments (
+ dept_id INT,
+ dept_name STRING,
+) ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
+
+
+//Insert 5 record on each table by using insert command
+//2. Joins
+
+SELECT e.emp_name, d.dept_name
+FROM employees e
+JOIN departments d
+ON e.emp_department = d.dept_id;
+ 
+
+//3. Aggregate Functions
+
+a. Count the number of employees:
+SELECT COUNT(*) FROM employees;
+ 
+b. Find the average salary:
+ SELECT AVG(emp_salary) FROM employees;
+
+c. Find the highest salary:
+ SELECT MAX(emp_salary) FROM employees;
+
+4. Group By
+//Group by department and get average salary per department:
+ SELECT emp_department, AVG(emp_salary) FROM employees GROUP BY emp_department;
